@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Product Management</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <h1 style="text-align: center">Product Management</h1>
+
+    <h2>Create Product</h2>
+    <form id="create-product-form" action="create_product.php" method="POST">
+      <label for="create-name">Name:</label>
+      <input type="text" name="name" id="create-name" />
+
+      <label for="create-description">Description:</label>
+      <textarea name="description" id="create-description"></textarea>
+
+      <label for="create-price">Price:</label>
+      <input type="number" name="price" id="create-price" />
+
+      <label for="create-quantity">Quantity:</label>
+      <input type="number" name="quantity" id="create-quantity" />
+
+      <button type="submit">Create Product</button>
+    </form>
+
+    <h2>Update Product</h2>
+    <form id="update-product-form" action="update_product.php" method="POST">
+      <label for="update-id">Product ID:</label>
+      <input type="number" name="id" id="update-id" />
+
+      <label for="update-name">Name:</label>
+      <input type="text" name="name" id="update-name" />
+
+      <label for="update-description">Description:</label>
+      <textarea name="description" id="update-description"></textarea>
+
+      <label for="update-price">Price:</label>
+      <input type="number" name="price" id="update-price" />
+
+      <label for="update-quantity">Quantity:</label>
+      <input type="number" name="quantity" id="update-quantity" />
+
+      <button type="submit">Update Product</button>
+    </form>
+
+    <h2>Product List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($products as $product): ?>
+        <tr>
+          <td><?php echo $product['name']; ?></td>
+          <td><?php echo $product['description']; ?></td>
+          <td><?php echo $product['price']; ?></td>
+          <td><?php echo $product['quantity']; ?></td>
+          <td>
+            <a href="update_product.php?id=<?php echo $product['id']; ?>"
+              >Edit</a
+            >
+            <a
+              href="delete_product.php?id=<?php echo $product['id']; ?>"
+              class="delete-link"
+              >Delete</a
+            >
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var createProductForm = document.getElementById("create-product-form");
+        createProductForm.addEventListener("submit", function (event) {
+          if (!validateForm(createProductForm)) {
+            event.preventDefault();
+          }
+        });
+
+        var updateProductForm = document.getElementById("update-product-form");
+        updateProductForm.addEventListener("submit", function (event) {
+          if (!validateForm(updateProductForm)) {
+            event.preventDefault();
+          }
+        });
+
+        var deleteLinks = document.getElementsByClassName("delete-link");
+        for (var i = 0; i < deleteLinks.length; i++) {
+          deleteLinks[i].addEventListener("click", function (event) {
+            var confirmDelete = confirm(
+              "Are you sure you want to delete this product?"
+            );
+            if (!confirmDelete) {
+              event.preventDefault();
+            }
+          });
+        }
+
+        function validateForm(form) {
+          var nameInput = form.elements["name"];
+          var descriptionInput = form.elements["description"];
+          var priceInput = form.elements["price"];
+          var quantityInput = form.elements["quantity"];
+
+          var isValid = true;
+
+          if (nameInput.value.trim() === "") {
+            nameInput.classList.add("error");
+            isValid = false;
+          } else {
+            nameInput.classList.remove("error");
+          }
+
+          if (descriptionInput.value.trim() === "") {
+            descriptionInput.classList.add("error");
+            isValid = false;
+          } else {
+            descriptionInput.classList.remove("error");
+          }
+
+          if (priceInput.value.trim() === "") {
+            priceInput.classList.add("error");
+            isValid = false;
+          } else {
+            priceInput.classList.remove("error");
+          }
+
+          if (quantityInput.value.trim() === "") {
+            quantityInput.classList.add("error");
+            isValid = false;
+          } else {
+            quantityInput.classList.remove("error");
+          }
+
+          return isValid;
+        }
+      });
+    </script>
+  </body>
+</html>
